@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom";
+import api from "../api/api";
 
-function ProductCard({ producto, eliminarProducto }) {
+function ProductCard({ producto }) {
   const navigate = useNavigate();
 
-  // 🔥 mapa de clases por categoría
+  // 🔥 Clases por categoría
   const getCategoriaClass = (categoria) => {
     switch (categoria) {
       case "Laptop":
@@ -21,11 +22,24 @@ function ProductCard({ producto, eliminarProducto }) {
     }
   };
 
+  // 🔥 Eliminar producto
+  const handleDelete = async () => {
+    const confirmar = window.confirm("¿Eliminar producto?");
+    if (!confirmar) return;
+
+    try {
+      await api.delete(`/productos/${producto._id}`);
+      window.location.reload(); // refresca lista
+    } catch (error) {
+      console.error("Error al eliminar", error);
+    }
+  };
+
   return (
     <div className="card">
       <h3>{producto.nombre}</h3>
 
-      {/* 🔥 BADGE DE CATEGORÍA */}
+      {/* 🔥 BADGE */}
       <span className={`badge ${getCategoriaClass(producto.categoria)}`}>
         {producto.categoria}
       </span>
@@ -33,13 +47,15 @@ function ProductCard({ producto, eliminarProducto }) {
       <p><strong>Precio:</strong> S/. {producto.precio}</p>
       <p><strong>Stock:</strong> {producto.stock}</p>
 
-      <button onClick={() => navigate(`/editar/${producto.id}`)}>
-        Editar
-      </button>
+      <div className="actions">
+        <button onClick={() => navigate(`/editar/${producto._id}`)}>
+          Editar
+        </button>
 
-      <button onClick={() => eliminarProducto(producto.id)}>
-        Eliminar
-      </button>
+        <button onClick={handleDelete}>
+          Eliminar
+        </button>
+      </div>
     </div>
   );
 }

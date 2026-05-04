@@ -28,6 +28,7 @@ body {
   color: white;
   text-decoration: none;
   margin-bottom: 10px;
+  transition: 0.2s;
 }
 
 .sidebar a:hover {
@@ -58,6 +59,20 @@ body {
   padding: 15px;
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+}
+
+.card h3 {
+  margin: 0 0 5px 0;
+}
+
+.card p {
+  font-size: 14px;
+  margin: 5px 0;
 }
 
 /* BOTONES */
@@ -69,6 +84,7 @@ button {
   color: white;
   border-radius: 6px;
   cursor: pointer;
+  transition: 0.2s;
 }
 
 button:hover {
@@ -83,7 +99,8 @@ button:hover {
   border-radius: 10px;
 }
 
-input {
+input,
+select {
   width: 100%;
   padding: 8px;
   margin-bottom: 10px;
@@ -93,21 +110,6 @@ input {
 .error {
   color: red;
   font-size: 12px;
-}
-
-.card h3 {
-  margin: 0;
-}
-
-.card p {
-  font-size: 18px;
-  font-weight: bold;
-}
-
-input[type="text"] {
-  padding: 8px;
-  margin-bottom: 10px;
-  width: 250px;
 }
 
 /* BADGE BASE */
@@ -127,9 +129,12 @@ input[type="text"] {
 .accesorio { background-color: #ede9fe; color: #5b21b6; }
 .movil { background-color: #fee2e2; color: #991b1b; }
 
-/* SELECT bonito (opcional) */
-select {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
+.stats-grid {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.recharts-wrapper {
+  margin: 20px auto;
 }

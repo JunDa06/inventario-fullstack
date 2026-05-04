@@ -1,40 +1,44 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import api from "../api/api";
 import ProductCard from "../components/ProductCard";
 
-function ProductList({ productos, eliminarProducto }) {
-  const [busqueda, setBusqueda] = useState("");
+function ProductList({ eliminarProducto }) {
+  const [productos, setProductos] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // 🔍 Filtrar productos
-  const productosFiltrados = productos.filter((producto) =>
-    producto.nombre.toLowerCase().includes(busqueda.toLowerCase())
-  );
+  const obtenerProductos = async () => {
+    try {
+      const res = await api.get("/productos");
+      setProductos(res.data);
+    } catch (error) {
+      console.error("Error al obtener productos", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    obtenerProductos();
+  }, []);
+
+  if (loading) return <p>Cargando...</p>;
 
   return (
     <div>
       <h2>📦 Productos</h2>
 
-      {/* 🔍 BUSCADOR */}
-      <input
-        type="text"
-        placeholder="Buscar producto..."
-        value={busqueda}
-        onChange={(e) => setBusqueda(e.target.value)}
-      />
-
-      {/* ➕ BOTÓN */}
       <Link to="/nuevo">
         <button>+ Nuevo Producto</button>
       </Link>
 
-      {/* 📦 LISTA */}
-      {productosFiltrados.length === 0 ? (
-        <p>No se encontraron productos</p>
+      {productos.length === 0 ? (
+        <p>No hay productos</p>
       ) : (
         <div className="product-grid">
-          {productosFiltrados.map((producto) => (
+          {productos.map((producto) => (
             <ProductCard
-              key={producto.id}
+              key={producto._id}
               producto={producto}
               eliminarProducto={eliminarProducto}
             />

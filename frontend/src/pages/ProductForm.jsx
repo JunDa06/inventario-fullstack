@@ -1,18 +1,33 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { useEffect, useState } from "react";
+import api from "../api/api";
 
-function ProductForm({
-  agregarProducto,
-  productos,
-  actualizarProducto
-}) {
+function ProductForm() {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const productoEditar = productos?.find(
-    (p) => p.id === Number(id)
-  );
+  const [productoEditar, setProductoEditar] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // 🔥 Obtener producto si estamos editando
+  useEffect(() => {
+    const obtenerProducto = async () => {
+      if (id) {
+        try {
+          const res = await api.get("/productos");
+          const producto = res.data.find((p) => p._id === id);
+          setProductoEditar(producto);
+        } catch (error) {
+          console.error("Error al cargar producto", error);
+        }
+      }
+      setLoading(false);
+    };
+
+    obtenerProducto();
+  }, [id]);
 
   const initialValues = productoEditar || {
     nombre: "",
@@ -23,7 +38,7 @@ function ProductForm({
 
   const validationSchema = Yup.object({
     nombre: Yup.string().required("El nombre es obligatorio"),
-    
+
     categoria: Yup.string().required("La categoría es obligatoria"),
 
     precio: Yup.number()
@@ -37,21 +52,25 @@ function ProductForm({
       .required("El stock es obligatorio")
   });
 
-  const onSubmit = (values) => {
-    if (productoEditar) {
-      actualizarProducto({ ...values, id: productoEditar.id });
-    } else {
-      agregarProducto(values);
-    }
+  const onSubmit = async (values) => {
+    try {
+      if (productoEditar) {
+        await api.put(`/productos/${productoEditar._id}`, values);
+      } else {
+        await api.post("/productos", values);
+      }
 
-    navigate("/");
+      navigate("/");
+    } catch (error) {
+      console.error("Error al guardar producto", error);
+    }
   };
+
+  if (loading) return <p>Cargando...</p>;
 
   return (
     <div className="form-container">
-      <h2>
-        {productoEditar ? "Editar Producto" : "Registrar Producto"}
-      </h2>
+      <h2>{productoEditar ? "Editar Producto" : "Nuevo Producto"}</h2>
 
       <Formik
         initialValues={initialValues}
@@ -68,11 +87,11 @@ function ProductForm({
             <ErrorMessage name="nombre" component="p" className="error" />
           </div>
 
-          {/* 🔥 CATEGORÍA */}
+          {/* CATEGORÍA */}
           <div>
             <label>Categoría</label>
             <Field as="select" name="categoria">
-              <option value="">Seleccione una categoría</option>
+              <option value="">Seleccione</option>
               <option value="Laptop">Laptop</option>
               <option value="Teclado">Teclado</option>
               <option value="Monitor">Monitor</option>
