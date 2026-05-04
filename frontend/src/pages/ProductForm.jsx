@@ -10,6 +10,7 @@ function ProductForm() {
 
   const [productoEditar, setProductoEditar] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(""); // 🔥 NUEVO
 
   // 🔥 Obtener producto si estamos editando
   useEffect(() => {
@@ -54,6 +55,8 @@ function ProductForm() {
 
   const onSubmit = async (values) => {
     try {
+      setError(""); // limpiar error
+
       if (productoEditar) {
         await api.put(`/productos/${productoEditar._id}`, values);
       } else {
@@ -62,7 +65,11 @@ function ProductForm() {
 
       navigate("/");
     } catch (error) {
-      console.error("Error al guardar producto", error);
+      // 🔥 MOSTRAR ERROR DEL BACKEND
+      const mensaje =
+        error.response?.data?.error || "Error al conectar con el servidor";
+
+      setError(mensaje);
     }
   };
 
@@ -71,6 +78,9 @@ function ProductForm() {
   return (
     <div className="form-container">
       <h2>{productoEditar ? "Editar Producto" : "Nuevo Producto"}</h2>
+
+      {/* 🔥 MENSAJE DE ERROR */}
+      {error && <p className="error">{error}</p>}
 
       <Formik
         initialValues={initialValues}
