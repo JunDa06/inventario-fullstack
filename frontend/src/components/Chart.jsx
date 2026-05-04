@@ -9,7 +9,6 @@ import {
 } from "recharts";
 
 function Chart({ productos }) {
-  // 🔥 Categorías fijas (para mostrar 0 si no hay)
   const categorias = [
     "Laptop",
     "Teclado",
@@ -18,7 +17,6 @@ function Chart({ productos }) {
     "Dispositivo móvil"
   ];
 
-  // 🔥 Colores por categoría
   const colores = {
     Laptop: "#3b82f6",
     Teclado: "#22c55e",
@@ -27,7 +25,6 @@ function Chart({ productos }) {
     "Dispositivo móvil": "#ef4444"
   };
 
-  // 🔥 Generar datos (incluye ceros)
   const data = categorias.map((cat) => {
     const total = productos.filter(p => p.categoria === cat).length;
     return {
