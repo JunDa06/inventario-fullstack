@@ -31,18 +31,15 @@ function ProductList() {
     obtenerProductos();
   }, []);
 
-  // 🔥 FILTRADO DINÁMICO
   useEffect(() => {
     let resultado = productos;
 
-    // 🔍 filtro por nombre
     if (busqueda) {
       resultado = resultado.filter((p) =>
         p.nombre.toLowerCase().includes(busqueda.toLowerCase())
       );
     }
 
-    // 📂 filtro por categoría
     if (categoria) {
       resultado = resultado.filter((p) => p.categoria === categoria);
     }
@@ -56,10 +53,10 @@ function ProductList() {
     <div>
       <h2>📦 Productos</h2>
 
-      {/* 🔥 ERROR */}
+      {/* ERROR */}
       {error && <p className="error">{error}</p>}
 
-      {/* 🔍 BUSCADOR */}
+      {/* BUSCADOR */}
       <input
         type="text"
         placeholder="Buscar producto..."
@@ -67,7 +64,7 @@ function ProductList() {
         onChange={(e) => setBusqueda(e.target.value)}
       />
 
-      {/* 📂 FILTRO CATEGORÍA */}
+      {/* FILTRO CATEGORÍA */}
       <select value={categoria} onChange={(e) => setCategoria(e.target.value)}>
         <option value="">Todas las categorías</option>
         <option value="Laptop">Laptop</option>

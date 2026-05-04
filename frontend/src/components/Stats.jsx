@@ -11,7 +11,6 @@ function Stats({ productos = [] }) {
     0
   );
 
-  // 🔥 Formato peruano (16.600)
   const formatoMoneda = valorTotal.toLocaleString("es-PE");
 
   return (

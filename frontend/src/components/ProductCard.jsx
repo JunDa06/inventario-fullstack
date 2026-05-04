@@ -4,7 +4,6 @@ import api from "../api/api";
 function ProductCard({ producto }) {
   const navigate = useNavigate();
 
-  // 🔥 Clases por categoría
   const getCategoriaClass = (categoria) => {
     switch (categoria) {
       case "Laptop":
@@ -22,7 +21,6 @@ function ProductCard({ producto }) {
     }
   };
 
-  // 🔥 Eliminar producto
   const handleDelete = async () => {
     const confirmar = window.confirm("¿Eliminar producto?");
     if (!confirmar) return;

@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const Producto = require("../models/Product");
 
-// 🔥 GET - obtener todos (con filtro opcional por categoría)
 router.get("/", async (req, res) => {
   try {
     const { categoria } = req.query;
@@ -19,12 +18,10 @@ router.get("/", async (req, res) => {
   }
 });
 
-// 🔥 POST - crear (con validación)
 router.post("/", async (req, res) => {
   try {
     const { nombre, categoria, precio, stock } = req.body;
 
-    // ✅ VALIDACIÓN BACKEND
     if (!nombre || !categoria || precio <= 0 || stock < 0) {
       return res.status(400).json({
         error: "Datos inválidos: verifica nombre, categoría, precio y stock"
@@ -46,7 +43,6 @@ router.post("/", async (req, res) => {
   }
 });
 
-// 🔥 PUT - actualizar (con validación)
 router.put("/:id", async (req, res) => {
   try {
     const { nombre, categoria, precio, stock } = req.body;
@@ -73,7 +69,6 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// 🔥 DELETE - eliminar
 router.delete("/:id", async (req, res) => {
   try {
     const producto = await Producto.findByIdAndDelete(req.params.id);
